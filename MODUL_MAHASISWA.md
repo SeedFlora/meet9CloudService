@@ -1,6 +1,8 @@
 # Modul Mahasiswa Lab 09 — Sentiment dengan Gradio
 
-**Sesi RPS:** 9 · **Mode utama:** Python lokal · **Hasil yang dikumpulkan:** kode, perbandingan model, bukti UI, dan commit Git.
+**Kebijakan kelas:** Lab ini latihan formatif, tanpa tugas, nilai, atau penyerahan terpisah. Satu proyek besar dikerjakan oleh kelompok **3 orang**, dengan presentasi checkpoint minggu 7 (UTS) dan hasil akhir minggu 14 (UAS). Simpan hasil lab hanya bila berguna sebagai referensi atau bukti proses proyek. Baca [brief proyek kelompok](PROYEK_KELOMPOK.md). Bobot resmi tetap mengikuti RPS/LMS.
+
+**Sesi RPS:** 9 · **Mode utama:** Python lokal · **Bukti latihan opsional untuk proyek:** kode, perbandingan model, bukti UI, dan commit Git.
 
 **Jenis bukti visual:** gambar Gradio dan GitHub adalah tangkapan browser dari aplikasi/repo yang berjalan. Gambar keluaran terminal berlatar gelap menyajikan ulang teks hasil perintah yang benar-benar dijalankan agar terbaca; itu bukan screenshot terminal langsung. Jalur DistilBERT/Space opsional tidak memiliki screenshot hasil yang diverifikasi di sini.
 
@@ -73,7 +75,7 @@ Pada Bash gunakan `.venv/bin/python`. Pilih **DistilBERT English** dan gunakan k
 
 * **Langkah:** Kosongkan kotak teks Gradio lalu klik **Analisis**. **Fungsi:** Menguji validasi input UI/model. **Cara kerja:** Fungsi prediksi menolak string kosong dan mengembalikan pesan terstruktur tanpa mematikan server. **Baca hasil:** Baca pesan validasi pada panel Detail; aplikasi tetap bisa dipakai setelah input diperbaiki.
 
-**Langkah 5 — model opsional.** Pilihan **DistilBERT English** berada pada UI di gambar pembuka modul. Jalankan hanya setelah dependency model terpasang; laporkan waktu dan hasil mesin Anda sendiri. Tidak ada screenshot hasil DistilBERT yang terverifikasi dalam modul ini karena jalur wajib kelas memakai baseline lokal.
+**Langkah 5 — model opsional.** Pilihan **DistilBERT English** berada pada UI di gambar pembuka modul. Jalankan hanya setelah dependency model terpasang; catat waktu dan hasil mesin Anda sendiri. Tidak ada screenshot hasil DistilBERT yang terverifikasi dalam modul ini karena jalur wajib kelas memakai baseline lokal.
 
 ## Pertanyaan untuk laporan
 

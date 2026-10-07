@@ -1,5 +1,17 @@
 # Lab 09 — Hugging Face, Gradio, dan model sentiment
 
+<!-- lecture-materials:start -->
+
+## Materi teori sebelum praktikum
+
+- [Pertemuan 09: Hugging Face Spaces](slides/Teori_Pertemuan_09.pptx)
+
+Slide menghubungkan konsep, kasus kerja, bacaan/video resmi, dan langkah lab.
+
+<!-- lecture-materials:end -->
+
+**Kebijakan kelas:** Lab ini latihan formatif, tanpa tugas, nilai, atau penyerahan terpisah. Satu proyek besar dikerjakan oleh kelompok **3 orang**, dengan presentasi checkpoint minggu 7 (UTS) dan hasil akhir minggu 14 (UAS). Simpan hasil lab hanya bila berguna sebagai referensi atau bukti proses proyek. Baca [brief proyek kelompok](PROYEK_KELOMPOK.md). Bobot resmi tetap mengikuti RPS/LMS.
+
 **Capaian:** membangun UI ML dengan beberapa tipe komponen, melatih baseline kecil, membandingkan hasil dengan DistilBERT, dan memahami biaya/latensi deployment. Jalur wajib berjalan lokal tanpa akun.
 
 ## Lokal, ringan
@@ -42,4 +54,4 @@ Rujukan: [HF Spaces](https://huggingface.co/docs/hub/en/spaces-overview), [HF Sp
 
 Pemeriksa baseline: PowerShell `.\.venv\Scripts\python -B tests\challenge.py`; Bash `.venv/bin/python -B tests/challenge.py`. Hasil uji dengan Gradio 6.29.0: **9 PASS, 0 FAIL** tanpa DistilBERT.
 
-Panduan: [modul mahasiswa dan kunci](MODUL_MAHASISWA.md), [panduan dosen](PANDUAN_DOSEN.md), [panduan Git](PANDUAN_GIT.md). Screenshot ada di `screenshots/`.
+Panduan: [modul mahasiswa dan kunci](MODUL_MAHASISWA.md), [panduan Git](PANDUAN_GIT.md). Screenshot ada di `screenshots/`.
