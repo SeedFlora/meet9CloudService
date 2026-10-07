@@ -43,4 +43,3 @@ Rujukan: [HF Spaces](https://huggingface.co/docs/hub/en/spaces-overview), [HF Sp
 Pemeriksa baseline: PowerShell `.\.venv\Scripts\python -B tests\challenge.py`; Bash `.venv/bin/python -B tests/challenge.py`. Hasil uji dengan Gradio 6.29.0: **9 PASS, 0 FAIL** tanpa DistilBERT.
 
 Panduan: [modul mahasiswa dan kunci](MODUL_MAHASISWA.md), [panduan dosen](PANDUAN_DOSEN.md), [panduan Git](PANDUAN_GIT.md). Screenshot ada di `screenshots/`.
-
