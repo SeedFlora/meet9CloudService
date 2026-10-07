@@ -2,6 +2,8 @@
 
 **Repo materi:** `SeedFlora/meet9CloudService` · **durasi contoh:** 100 menit · **jalur wajib:** Python lokal tanpa akun · **jalur pilihan:** DistilBERT dan Hugging Face Space bila layanan tersedia. Mahasiswa menerima [modul dengan kunci lengkap](MODUL_MAHASISWA.md), sehingga nilai praktik ditentukan oleh bukti run dan penjelasan hasil milik mereka, bukan hafalan kode.
 
+**Jenis bukti visual:** Gradio/GitHub adalah tangkapan browser nyata. Gambar terminal berlatar gelap adalah transkrip hasil perintah yang ditata ulang, bukan screenshot terminal langsung. DistilBERT/Space opsional tidak diklaim sebagai demo terverifikasi.
+
 ## Hasil belajar dan alur kerja nyata
 
 Mahasiswa memisahkan data latih, fungsi prediksi, aturan ambang keputusan, UI, dan evaluasi. Kasusnya adalah triase ulasan pelanggan: tim operasional membutuhkan label awal dan bukti kapan skor tidak cukup untuk keputusan otomatis. Jelaskan sejak awal bahwa 24 sampel latihan adalah bahan eksperimen, bukan model produksi.
@@ -42,6 +44,10 @@ Pada komputer verifikasi, baseline, UI Gradio **6.29.0** sesuai `requirements.tx
 
 **6. Pemeriksa.** `.\.venv\Scripts\python -B tests\challenge.py` memeriksa sembilan syarat: 24 contoh dan dua label, tokenisasi, skor dua polaritas, perubahan keputusan pada 0,9, keluaran UI, input kosong, mode salah, serta TSV dapat dimuat. **9 PASS, 0 FAIL** berarti jalur baseline teruji; kualitas model pada data nyata tetap perlu evaluasi terpisah.
 
+![Data TSV dan sanity check baseline](screenshots/lab09_data.png)
+
+*Perintah:* `Get-Content .\training.tsv | Select-Object -First 5`, lalu `.\.venv\Scripts\python core.py`. *Fungsi:* memeriksa format data dan sanity check sebelum demo web. *Cara kerja:* `core.py` membaca 24 contoh, menghitung frekuensi token tiap label, lalu menguji dua input dasar. *Baca hasil:* header TSV, contoh positif, dan `sanity check lulus`. Gambar ini menata ulang output aktual, bukan tangkapan layar terminal langsung.
+
 ![UI Gradio sesudah prediksi nyata](screenshots/09_web_hasil.png)
 
 *Command/tindakan:* `python app.py` kemudian klik **Analisis**. *Fungsi:* menunjukkan aliran input ke model dan tiga keluaran. *Cara kerja:* Gradio memanggil `analyze`, model menghitung skor, JSON menampilkan ambang/keputusan. *Baca hasil:* sekitar 0,8986 untuk contoh positif pada ambang 0,5.
@@ -53,6 +59,10 @@ Pada komputer verifikasi, baseline, UI Gradio **6.29.0** sesuai `requirements.tx
 ![Hasil checker baseline Lab 09](screenshots/09_challenge_output.png)
 
 *Command:* `.\.venv\Scripts\python -B tests\challenge.py`. *Fungsi:* verifikasi data/model/UI sebelum penilaian. *Cara kerja:* sembilan pemeriksaan otomatis dijalankan tanpa mengunduh DistilBERT. *Baca hasil:* 9 PASS, 0 FAIL; keluaran aktual ditata ulang agar terbaca.
+
+![Repo materi Lab 09 di GitHub](screenshots/09_github_repo_aktual.png)
+
+*Command/tindakan:* setelah `git push`, buka repo `SeedFlora/meet9CloudService`. *Fungsi:* menunjukkan hasil publikasi sumber, PDF, slide, dan screenshot. *Cara kerja:* GitHub menampilkan tree pada branch `main` dari commit terakhir. *Baca hasil:* folder `screenshots`, `slides`, `tests` dan modul PDF muncul. Minta mahasiswa menunjukkan repo mereka sendiri untuk penilaian; screenshot ini adalah repo materi dosen.
 
 ## Kunci pertanyaan dan diskusi
 

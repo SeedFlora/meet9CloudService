@@ -2,6 +2,8 @@
 
 **Sesi RPS:** 9 · **Mode utama:** Python lokal · **Hasil yang dikumpulkan:** kode, perbandingan model, bukti UI, dan commit Git.
 
+**Jenis bukti visual:** gambar Gradio dan GitHub adalah tangkapan browser dari aplikasi/repo yang berjalan. Gambar keluaran terminal berlatar gelap menyajikan ulang teks hasil perintah yang benar-benar dijalankan agar terbaca; itu bukan screenshot terminal langsung. Jalur DistilBERT/Space opsional tidak memiliki screenshot hasil yang diverifikasi di sini.
+
 ## Tujuan dan konsep
 
 Anda akan menjalankan UI machine learning yang menerima teks dan menampilkan label, probabilitas, detail, serta token. `core.py` melatih Naive Bayes kecil dari `training.tsv` sebagai baseline. `app.py` membungkusnya dalam Gradio; DistilBERT English adalah pembanding opsional yang perlu unduhan model. Setelah lab, bedakan data latih, inferensi, ambang keputusan, waktu muat pertama, dan waktu prediksi berikutnya.
@@ -43,7 +45,7 @@ Pada Bash gunakan `.venv/bin/python`. Pilih **DistilBERT English** dan gunakan k
 
 ### Tampilan pada setiap langkah
 
-**Langkah 1 — data dan sanity check.** Cuplikan ini memperlihatkan data contoh dan keluaran `core.py` yang dijalankan.
+**Langkah 1 — data dan sanity check.** Gambar berikut menyajikan ulang baris data dan keluaran `core.py` dari uji lokal agar teks terbaca. Ini adalah visualisasi transkrip, bukan tangkapan layar terminal langsung.
 
 ![Data latihan dan sanity check baseline](screenshots/lab09_data.png)
 
@@ -71,7 +73,7 @@ Pada Bash gunakan `.venv/bin/python`. Pilih **DistilBERT English** dan gunakan k
 
 * **Langkah:** Kosongkan kotak teks Gradio lalu klik **Analisis**. **Fungsi:** Menguji validasi input UI/model. **Cara kerja:** Fungsi prediksi menolak string kosong dan mengembalikan pesan terstruktur tanpa mematikan server. **Baca hasil:** Baca pesan validasi pada panel Detail; aplikasi tetap bisa dipakai setelah input diperbaiki.
 
-**Langkah 5 — model opsional.** Pilihan **DistilBERT English** berada pada UI di gambar pembuka modul. Jalankan hanya setelah dependency model terpasang; laporkan waktu dan hasil mesin Anda sendiri.
+**Langkah 5 — model opsional.** Pilihan **DistilBERT English** berada pada UI di gambar pembuka modul. Jalankan hanya setelah dependency model terpasang; laporkan waktu dan hasil mesin Anda sendiri. Tidak ada screenshot hasil DistilBERT yang terverifikasi dalam modul ini karena jalur wajib kelas memakai baseline lokal.
 
 ## Pertanyaan untuk laporan
 
@@ -126,6 +128,10 @@ Bayangkan tim dukungan harus menandai ulasan positif dan negatif. Model baseline
 ![Sembilan pemeriksaan baseline Lab 09 lulus](screenshots/09_challenge_output.png)
 
 *Perintah/tindakan:* `.\.venv\Scripts\python -B tests\challenge.py` atau `.venv/bin/python -B tests/challenge.py`. *Fungsi:* memeriksa data, model, ambang, dan validasi. *Cara kerja:* skrip menjalankan sembilan assertion tanpa model besar. *Baca hasil:* 9 PASS, 0 FAIL; cuplikan output aktual ditata ulang untuk modul.
+
+![Repo Lab 09 yang sudah terbit di GitHub](screenshots/09_github_repo_aktual.png)
+
+*Perintah/tindakan:* setelah `git status --short`, `git add .`, pemeriksaan diff, dan `git push`, buka `https://github.com/SeedFlora/meet9CloudService`. *Fungsi:* memastikan berkas sumber, modul, slide, dan bukti dapat diakses dari repo kelas. *Cara kerja:* Git mengirim commit ke branch `main`; halaman GitHub menampilkan isi commit terakhir. *Baca hasil:* repo publik bertanda template dengan folder `screenshots`, `slides`, `tests`, serta PDF. Gambar ini adalah repo materi dosen, bukan bukti push repo pribadi mahasiswa.
 
 ### Jawaban pertanyaan laporan
 
