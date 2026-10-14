@@ -20,16 +20,18 @@ Slide sesi 9 juga menunjukkan sketsa `sentiment_test.py` dan halaman ML Next.js 
 
 ## Persiapan dan menjalankan baseline
 
-Gunakan Python 3 dan akses internet hanya untuk memasang dependency pertama kali. Dari root repo Lab 09 pada PowerShell:
+Gunakan **Python 3.10 atau lebih baru**, sesuai kebutuhan Gradio 6.29.0 pada `requirements.txt` ([metadata paket](https://pypi.org/project/gradio/6.29.0/)). Akses internet diperlukan untuk memasang dependency pertama kali. Dari root repo Lab 09 pada PowerShell:
 
 ```powershell
+python --version
 python -m venv .venv
+.\.venv\Scripts\python -m pip --version
 .\.venv\Scripts\python -m pip install -r requirements.txt
 .\.venv\Scripts\python core.py
 .\.venv\Scripts\python app.py
 ```
 
-Pada Bash/WSL ganti interpreter dengan `.venv/bin/python` setelah `python3 -m venv .venv`. `core.py` harus menampilkan **sanity check lulus**. Buka `http://127.0.0.1:7860`.
+Pada Bash/WSL periksa `python3 --version`, buat environment dengan `python3 -m venv .venv`, lalu gunakan `.venv/bin/python` pada semua command berikutnya, termasuk `.venv/bin/python -m pip --version`. **Checkpoint runtime:** versi Python minimal 3.10; keluaran pip menunjuk environment `.venv` repo ini. Jika lebih tua atau command tidak ditemukan, siapkan runtime yang sesuai di lingkungan praktik sebelum memasang paket. `core.py` harus menampilkan **sanity check lulus**. Buka `http://127.0.0.1:7860`.
 
 ## Praktik bertahap
 
@@ -44,6 +46,8 @@ Pada Bash/WSL ganti interpreter dengan `.venv/bin/python` setelah `python3 -m ve
 ```
 
 Pada Bash gunakan `.venv/bin/python`. Pilih **DistilBERT English** dan gunakan kalimat Inggris, misalnya `this service is fast and helpful`. Catat waktu pertama (download + load) dan waktu berikutnya. Model bahasa Inggris tidak boleh dinilai hanya dari contoh bahasa Indonesia.
+
+Python 3.10+ juga memenuhi minimum runtime pada versi [Transformers](https://pypi.org/project/transformers/5.19.0/) dan [PyTorch](https://pypi.org/project/torch/2.14.1/) yang diperiksa dalam rentang `requirements-transformer.txt`. Jalur ini tetap membutuhkan unduhan model serta RAM/disk tambahan; berhasil menjalankan baseline tidak membuktikan dependency model opsional sudah terpasang.
 
 ### Tampilan pada setiap langkah
 

@@ -16,12 +16,14 @@ Slide menghubungkan konsep, kasus kerja, bacaan/video resmi, dan langkah lab.
 
 ## Lokal, ringan
 
-Dari root repo Lab 09:
+Gunakan **Python 3.10 atau lebih baru** sesuai [kebutuhan Gradio 6.29.0](https://pypi.org/project/gradio/6.29.0/). Dari root repo Lab 09:
 
 PowerShell:
 
 ```powershell
+python --version
 python -m venv .venv
+.\.venv\Scripts\python -m pip --version
 .\.venv\Scripts\python -m pip install -r requirements.txt
 .\.venv\Scripts\python core.py
 .\.venv\Scripts\python app.py
@@ -30,7 +32,9 @@ python -m venv .venv
 Bash/WSL:
 
 ```bash
+python3 --version
 python3 -m venv .venv
+.venv/bin/python -m pip --version
 .venv/bin/python -m pip install -r requirements.txt
 .venv/bin/python core.py
 .venv/bin/python app.py
@@ -38,9 +42,13 @@ python3 -m venv .venv
 
 Buka `http://127.0.0.1:7860`. Coba contoh positif/negatif, ubah ambang, dan periksa tabel token. UI memakai Markdown, Textbox, Radio, Slider, Button, Label, JSON, Dataframe, dan Examples. `core.py` melatih Naive Bayes dari data `training.tsv`; ini model kecil untuk praktik, bukan evaluator kualitas produksi.
 
+Pastikan hasil pemeriksaan versi Python minimal 3.10 dan pip menunjuk `.venv` repo ini sebelum instalasi. Jika runtime lebih tua atau command tidak tersedia, siapkan runtime yang sesuai di lingkungan praktik terlebih dahulu.
+
 ## DistilBERT opsional
 
 Instal dependency berat: `.\.venv\Scripts\python -m pip install -r requirements-transformer.txt` (PowerShell) atau `.venv/bin/python -m pip install -r requirements-transformer.txt` (bash). Pilih **DistilBERT English** pada UI. Unduhan checkpoint pertama membutuhkan internet dan ruang disk; model ini dilatih untuk teks bahasa Inggris, jadi gunakan contoh Inggris. Catat latensi pertama (unduh + load) dan latensi setelah model siap.
+
+Python 3.10+ memenuhi minimum versi [Transformers](https://pypi.org/project/transformers/5.19.0/) dan [PyTorch](https://pypi.org/project/torch/2.14.1/) yang diperiksa dalam rentang dependency opsional; instalasi model tetap terpisah dari baseline.
 
 ## Push ke Hugging Face Space (opsional)
 
