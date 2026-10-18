@@ -14,35 +14,9 @@ Slide menghubungkan konsep, kasus kerja, bacaan/video resmi, dan langkah lab.
 
 **Capaian:** membangun UI ML dengan beberapa tipe komponen, melatih baseline kecil, membandingkan hasil dengan DistilBERT, dan memahami biaya/latensi deployment. Jalur wajib berjalan lokal tanpa akun.
 
-## Lokal, ringan
+## Mulai praktikum lokal
 
-Gunakan **Python 3.10 atau lebih baru** sesuai [kebutuhan Gradio 6.29.0](https://pypi.org/project/gradio/6.29.0/). Dari root repo Lab 09:
-
-PowerShell:
-
-```powershell
-python --version
-python -m venv .venv
-.\.venv\Scripts\python -m pip --version
-.\.venv\Scripts\python -m pip install -r requirements.txt
-.\.venv\Scripts\python core.py
-.\.venv\Scripts\python app.py
-```
-
-Bash/WSL:
-
-```bash
-python3 --version
-python3 -m venv .venv
-.venv/bin/python -m pip --version
-.venv/bin/python -m pip install -r requirements.txt
-.venv/bin/python core.py
-.venv/bin/python app.py
-```
-
-Buka `http://127.0.0.1:7860`. Coba contoh positif/negatif, ubah ambang, dan periksa tabel token. UI memakai Markdown, Textbox, Radio, Slider, Button, Label, JSON, Dataframe, dan Examples. `core.py` melatih Naive Bayes dari data `training.tsv`; ini model kecil untuk praktik, bukan evaluator kualitas produksi.
-
-Pastikan hasil pemeriksaan versi Python minimal 3.10 dan pip menunjuk `.venv` repo ini sebelum instalasi. Jika runtime lebih tua atau command tidak tersedia, siapkan runtime yang sesuai di lingkungan praktik terlebih dahulu.
+Ikuti [modul mahasiswa langkah demi langkah](MODUL_MAHASISWA.md). Modul memakai **PowerShell, clone baru, satu perintah tiap langkah**, hasil yang diharapkan, dan screenshot contoh. Semua langkah utama berjalan lokal. Tidak ada laporan atau push terpisah yang wajib dikumpulkan.
 
 ## DistilBERT opsional
 
@@ -50,11 +24,20 @@ Instal dependency berat: `.\.venv\Scripts\python -m pip install -r requirements-
 
 Python 3.10+ memenuhi minimum versi [Transformers](https://pypi.org/project/transformers/5.19.0/) dan [PyTorch](https://pypi.org/project/torch/2.14.1/) yang diperiksa dalam rentang dependency opsional; instalasi model tetap terpisah dari baseline.
 
-## Push ke Hugging Face Space (opsional)
+## Hugging Face Spaces dan iframe (perluasan opsional)
 
-Ketersediaan dan biaya hardware Space dapat berubah; periksa dokumentasi resmi serta akun/institusi pada hari praktik. **Jangan mengharuskan mahasiswa membeli plan.** Jika akun/institusi memenuhi syarat, buat Gradio Space, salin `app.py`, `core.py`, `training.tsv`, `requirements.txt`, dan isi `SPACE_README.md` sebagai `README.md` pada repo Space, lalu commit/push dengan autentikasi Git/HF CLI. Setiap push memicu rebuild. Baseline tidak membutuhkan GPU, tetapi deployment tetap mengikuti syarat plan/hardware akun. Jangan menaruh token di URL Git atau source.
+Selesaikan baseline lokal lebih dahulu. Jalur ini memerlukan akun dan akses membuat Gradio Space. Pilih hardware CPU yang tersedia pada akun. Periksa biaya/kuota di dashboard sebelum menyalakan compute.
 
-Jika deploy tidak tersedia, tunjukkan demo lokal + video dan unggah kode ke GitHub. Static Space gratis dapat dipakai untuk halaman ringkasan, tetapi tidak menjalankan Python/Gradio. Jika Space publik tersedia, embed URL Space di halaman Next.js via iframe; URL harus sesuai domain Space milik Anda.
+1. Login ke Hugging Face, klik **New Space**, pilih nama, SDK **Gradio**, dan hardware CPU yang tersedia. Pilih visibilitas sesuai data demo. Catat URL Git repo Space milik Anda.
+2. Buka PowerShell di folder induk praktikum. Clone URL tersebut ke folder baru. Salin `app.py`, `core.py`, `training.tsv`, dan `requirements.txt` dari repo Lab 09 ke root repo Space. Salin `SPACE_README.md` sebagai **README.md**. Metadata SDK dan `app_file` sekarang ada di root.
+3. Pada **Space Settings → Variables and secrets**, tambahkan **Variable** `GRADIO_SERVER_NAME` bernilai `0.0.0.0`. Kode `app.py` membacanya melalui environment. Jalur laptop tetap memakai `127.0.0.1`.
+4. Di folder repo Space, jalankan `git add app.py core.py training.tsv requirements.txt README.md`, `git commit -m "Add classroom sentiment demo"`, lalu `git push`. Gunakan autentikasi Git akun sendiri. Token hanya dimasukkan ke prompt autentikasi, bukan ke URL atau source.
+5. Baca tab **Logs** sampai **Running**, buka app, lalu ulangi satu teks positif dan satu teks negatif. Tombol **Embed this Space** menyediakan URL aplikasi dan contoh iframe.
+6. Pada halaman JSX proyek Next.js sendiri, salin iframe dari menu Embed. Isi `title="Sentiment demo"`, atur lebar `100%` dan tinggi yang cukup, lalu buka halaman Next.js untuk memastikan UI benar-benar termuat. URL repo `huggingface.co/spaces/...` berbeda dari URL aplikasi `*.hf.space`.
+
+Perintah CLI login yang berlaku saat revisi adalah `hf auth login` setelah memasang `huggingface_hub`. Pembuatan repo tersedia melalui `hf repos create NAMA_SPACE --repo-type space --sdk gradio`. Dashboard di langkah 1 lebih mudah untuk memilih akses dan hardware. [Dokumentasi CLI resmi](https://huggingface.co/docs/huggingface_hub/en/guides/cli), [konfigurasi Spaces](https://huggingface.co/docs/hub/en/spaces-config-reference).
+
+Static Space menjalankan HTML/JS, sehingga tidak menjalankan Python Gradio ini. DistilBERT baru tersedia di Space setelah dependency model opsional dimasukkan dan build berhasil. Demo cloud tidak termasuk hasil yang sudah diverifikasi pada screenshot lokal modul.
 
 **Bukti:** tiga teks uji yang mencakup dua label, waktu respons, screenshot UI, dan perbandingan baseline vs DistilBERT (bila dicoba). **Git opsional:** push source dan data latihan; cache model dan `.venv` tidak boleh ikut.
 

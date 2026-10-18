@@ -1,5 +1,7 @@
 """Gradio UI: baseline lokal dan DistilBERT opsional."""
 
+import os
+
 import gradio as gr
 
 from core import MODEL, SAMPLES, decide, tokenize
@@ -58,4 +60,4 @@ with gr.Blocks(title="Cloud Notes Sentiment Lab") as demo:
     run_button.click(analyze, inputs=[text_input, mode, threshold], outputs=[labels, details, tokens])
 
 if __name__ == "__main__":
-    demo.launch(server_name="127.0.0.1", server_port=7860)
+    demo.launch(server_name=os.getenv("GRADIO_SERVER_NAME", "127.0.0.1"), server_port=7860)
