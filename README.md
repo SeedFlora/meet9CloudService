@@ -24,11 +24,36 @@ Instal dependency berat: `.\.venv\Scripts\python -m pip install -r requirements-
 
 Python 3.10+ memenuhi minimum versi [Transformers](https://pypi.org/project/transformers/5.19.0/) dan [PyTorch](https://pypi.org/project/torch/2.14.1/) yang diperiksa dalam rentang dependency opsional; instalasi model tetap terpisah dari baseline.
 
+## Tambahan: hubungkan model ke website (tanpa GPU)
+
+Folder `web/` berisi dua halaman yang menghubungkan model ke website tanpa backend berat:
+
+| File | Cara kerja | Perlu server Python? |
+|---|---|---|
+| `web/gradio-client.html` | memanggil endpoint `/analyze` milik `app.py` lewat [`@gradio/client`](https://www.npmjs.com/package/@gradio/client) | ya, `app.py` harus hidup |
+| `web/browser-sentiment.html` | model `Xenova/bert-base-multilingual-uncased-sentiment` berjalan di browser dengan [Transformers.js](https://huggingface.co/docs/transformers.js) | tidak |
+
+PowerShell, dua terminal dari root repo Lab 09:
+
+```powershell
+# Terminal 1
+.\.venv\Scripts\python app.py
+# Terminal 2
+.\.venv\Scripts\python -m http.server 8000 --directory web
+```
+
+Buka <http://localhost:8000/gradio-client.html>, lalu <http://localhost:8000/browser-sentiment.html>. Jangan membuka file dengan dobel-klik (`file://`): app Gradio lokal hanya mengizinkan origin `localhost`, sehingga panggilan dari `file://` ditolak.
+
+- Unduhan model browser pertama sekitar 170 MB (`model_quantized.onnx`), berikutnya dari cache browser. Model memberi label `1 star` sampai `5 stars`; halaman memetakan 4-5 bintang ke `positive` dan 1-2 bintang ke `negative`.
+- Deploy gratis `browser-sentiment.html`: buat Space dengan SDK **Static** lalu unggah sebagai `index.html`, atau pakai GitHub Pages/Vercel. Static Space gratis untuk semua akun.
+- `gradio-client.html` juga dapat memanggil Space publik: isi kolom sumber dengan `username/nama-space`. Space privat membutuhkan token, jadi panggil dari server (Route Handler Lab 08), bukan dari browser.
+- Hasil uji 16 November 2026 (Chrome headless, Gradio 6.29.0): `gradio-client.html` mengembalikan keputusan `positive` (probabilitas 0.8986) untuk "layanan ini cepat dan membantu"; `browser-sentiment.html` memberi `5 stars` untuk kalimat itu dan `1 star` untuk "aplikasi sering gagal dibuka".
+
 ## Hugging Face Spaces dan iframe (perluasan opsional)
 
-Selesaikan baseline lokal lebih dahulu. Jalur ini memerlukan akun dan akses membuat Gradio Space. Pilih hardware CPU yang tersedia pada akun. Periksa biaya/kuota di dashboard sebelum menyalakan compute.
+Selesaikan baseline lokal lebih dahulu. Per 16 November 2026, membuat Gradio/Docker Space berbasis CPU memerlukan paket berbayar (PRO). Akun free yang berumur minimal 30 hari dengan email terverifikasi boleh membuat maksimal 2 Gradio Space di ZeroGPU, tetapi app wajib memiliki fungsi `@spaces.GPU`; baseline Naive Bayes ini tidak memakainya. Jalur gratis untuk semua akun adalah Static Space berisi `web/browser-sentiment.html` (lihat bagian *Tambahan* di bawah). Periksa biaya/kuota di dashboard sebelum menyalakan compute ([Spaces overview](https://huggingface.co/docs/hub/spaces-overview), [ZeroGPU](https://huggingface.co/docs/hub/spaces-zerogpu)).
 
-1. Login ke Hugging Face, klik **New Space**, pilih nama, SDK **Gradio**, dan hardware CPU yang tersedia. Pilih visibilitas sesuai data demo. Catat URL Git repo Space milik Anda.
+1. Login ke Hugging Face, klik **New Space**, pilih nama, SDK **Gradio**, dan hardware sesuai paket akun (CPU untuk PRO, ZeroGPU untuk akun free yang memenuhi syarat). Pilih visibilitas sesuai data demo. Catat URL Git repo Space milik Anda.
 2. Buka PowerShell di folder induk praktikum. Clone URL tersebut ke folder baru. Salin `app.py`, `core.py`, `training.tsv`, dan `requirements.txt` dari repo Lab 09 ke root repo Space. Salin `SPACE_README.md` sebagai **README.md**. Metadata SDK dan `app_file` sekarang ada di root.
 3. Pada **Space Settings → Variables and secrets**, tambahkan **Variable** `GRADIO_SERVER_NAME` bernilai `0.0.0.0`. Kode `app.py` membacanya melalui environment. Jalur laptop tetap memakai `127.0.0.1`.
 4. Di folder repo Space, jalankan `git add app.py core.py training.tsv requirements.txt README.md`, `git commit -m "Add classroom sentiment demo"`, lalu `git push`. Gunakan autentikasi Git akun sendiri. Token hanya dimasukkan ke prompt autentikasi, bukan ke URL atau source.

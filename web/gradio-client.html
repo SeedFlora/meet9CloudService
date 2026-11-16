@@ -1,0 +1,60 @@
+<!doctype html>
+<html lang="id">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Lab 09 - Website memanggil app Gradio</title>
+  <style>
+    body { font-family: system-ui, sans-serif; max-width: 720px; margin: 2rem auto; padding: 0 1rem; color: #1e293b; }
+    textarea, input { width: 100%; font: inherit; }
+    textarea { height: 5rem; }
+    button { padding: .5rem 1rem; margin: .5rem 0; font: inherit; }
+    pre { background: #f1f5f9; padding: 1rem; white-space: pre-wrap; }
+    small { color: #64748b; }
+  </style>
+</head>
+<body>
+  <h1>Website memanggil app Gradio</h1>
+  <p>Jalankan <code>python app.py</code> (Lab 09) terlebih dahulu. Halaman ini memanggil endpoint <code>/analyze</code> lewat <code>@gradio/client</code>.</p>
+  <label>Sumber app (URL lokal atau nama Space "username/nama-space")
+    <input id="src" value="http://127.0.0.1:7860/">
+  </label>
+  <textarea id="teks">layanan ini cepat dan membantu</textarea>
+  <button id="go">Analisis</button>
+  <pre id="out">Belum ada hasil.</pre>
+  <small>Buka halaman ini lewat http://localhost:8000 (python -m http.server 8000), bukan file://, karena app Gradio lokal hanya menerima origin localhost.</small>
+
+  <script type="module">
+    import { Client } from "https://cdn.jsdelivr.net/npm/@gradio/client@2.8.0/dist/index.min.js";
+
+    const $ = (id) => document.getElementById(id);
+    let app = null;
+    let connectedTo = "";
+
+    $("go").onclick = async () => {
+      $("out").textContent = "Memanggil model...";
+      try {
+        const source = $("src").value.trim();
+        if (!app || connectedTo !== source) {
+          app = await Client.connect(source);
+          connectedTo = source;
+        }
+        const t0 = performance.now();
+        const result = await app.predict("/analyze", {
+          text: $("teks").value,
+          mode: "Baseline lokal",
+          threshold: 0.5,
+        });
+        const [label, detail] = result.data;
+        $("out").textContent = JSON.stringify({
+          label: label.label,
+          detail,
+          latency_ms: Math.round(performance.now() - t0),
+        }, null, 2);
+      } catch (error) {
+        $("out").textContent = `Gagal memanggil app: ${error.message}. Pastikan app.py hidup dan halaman dibuka lewat http://localhost.`;
+      }
+    };
+  </script>
+</body>
+</html>

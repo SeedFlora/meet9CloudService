@@ -1,0 +1,59 @@
+<!doctype html>
+<html lang="id">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Lab 09 - Sentimen di Browser (Transformers.js)</title>
+  <style>
+    body { font-family: system-ui, sans-serif; max-width: 720px; margin: 2rem auto; padding: 0 1rem; color: #1e293b; }
+    textarea { width: 100%; height: 5rem; font: inherit; }
+    button { padding: .5rem 1rem; margin: .5rem 0; font: inherit; }
+    pre { background: #f1f5f9; padding: 1rem; white-space: pre-wrap; }
+    small { color: #64748b; }
+  </style>
+</head>
+<body>
+  <h1>Analisis Sentimen di Browser</h1>
+  <p>Model berjalan di perangkat pengguna dengan Transformers.js. Tidak ada server Python, GPU, atau token.</p>
+  <textarea id="teks">layanan ini cepat dan membantu</textarea>
+  <button id="go" disabled>Analisis</button>
+  <pre id="out">Memuat model (unduhan pertama sekitar 170 MB, berikutnya dari cache browser)...</pre>
+  <small id="info"></small>
+
+  <script type="module">
+    import { pipeline } from "https://cdn.jsdelivr.net/npm/@huggingface/transformers@4.3.2";
+
+    const $ = (id) => document.getElementById(id);
+    const MODEL = "Xenova/bert-base-multilingual-uncased-sentiment"; // label "1 star" .. "5 stars"
+
+    try {
+      const started = performance.now();
+      // dtype q8 berjalan di WASM (CPU). Coba juga { device: "webgpu", dtype: "fp32" } bila browser mendukung.
+      const classify = await pipeline("sentiment-analysis", MODEL, { dtype: "q8" });
+      $("info").textContent = `Model siap dalam ${((performance.now() - started) / 1000).toFixed(1)} s: ${MODEL}`;
+      $("out").textContent = "Model siap. Tulis teks lalu klik Analisis.";
+      $("go").disabled = false;
+
+      $("go").onclick = async () => {
+        const text = $("teks").value.trim();
+        if (!text) {
+          $("out").textContent = "Masukkan teks terlebih dahulu.";
+          return;
+        }
+        const t0 = performance.now();
+        const [result] = await classify(text);
+        const stars = parseInt(result.label, 10);
+        const decision = stars >= 4 ? "positive" : stars <= 2 ? "negative" : "neutral";
+        $("out").textContent = JSON.stringify({
+          label: result.label,
+          score: Number(result.score.toFixed(4)),
+          decision,
+          latency_ms: Math.round(performance.now() - t0),
+        }, null, 2);
+      };
+    } catch (error) {
+      $("out").textContent = `Model gagal dimuat: ${error.message}. Periksa koneksi internet dan buka halaman lewat http://localhost.`;
+    }
+  </script>
+</body>
+</html>
