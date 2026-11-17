@@ -1,0 +1,83 @@
+<!doctype html>
+<html lang="id">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>LLM kecil di browser (Transformers.js)</title>
+  <style>
+    body { font-family: system-ui, sans-serif; max-width: 720px; margin: 2rem auto; padding: 0 1rem; color: #1e293b; }
+    textarea { width: 100%; height: 4rem; font: inherit; }
+    button { padding: .5rem 1rem; margin: .5rem 0; font: inherit; }
+    pre { background: #f1f5f9; padding: 1rem; white-space: pre-wrap; min-height: 4rem; }
+    small { color: #64748b; display: block; }
+  </style>
+</head>
+<body>
+  <h1>LLM kecil di browser</h1>
+  <p>Model <code>onnx-community/Qwen2.5-0.5B-Instruct</code> berjalan di perangkat pengguna. Memakai WebGPU bila browser mendukung, jika tidak memakai WASM (CPU). Tanpa server dan tanpa token.</p>
+  <label for="prompt">Pertanyaan</label>
+  <textarea id="prompt" maxlength="1000">Apa itu Docker? Jawab dalam 2 kalimat.</textarea>
+  <button id="go" disabled>Kirim</button>
+  <pre id="out" aria-live="polite">Memuat model (unduhan pertama sekitar 480–520 MB, berikutnya dari cache browser)...</pre>
+  <small id="info"></small>
+  <small>Buka lewat http://localhost:8000 (python -m http.server 8000 --directory web), bukan file://.</small>
+
+  <script type="module">
+    const $ = (id) => document.getElementById(id);
+    const MODEL = "onnx-community/Qwen2.5-0.5B-Instruct";
+
+    try {
+      const { pipeline, TextStreamer } = await import("https://cdn.jsdelivr.net/npm/@huggingface/transformers@4.3.2");
+      // Beda per perangkat: WebGPU (GPU terintegrasi juga bisa) jauh lebih cepat daripada WASM/CPU.
+      const adapter = navigator.gpu ? await navigator.gpu.requestAdapter().catch(() => null) : null;
+      const started = performance.now();
+      let device = "wasm";
+      let dtype = "q8";
+      let generator;
+      if (adapter?.features.has("shader-f16")) {
+        try {
+          generator = await pipeline("text-generation", MODEL, { device: "webgpu", dtype: "q4f16" });
+          device = "webgpu";
+          dtype = "q4f16";
+        } catch {
+          $("out").textContent = "WebGPU gagal memuat model. Mencoba WASM (CPU)...";
+        }
+      }
+      generator ??= await pipeline("text-generation", MODEL, { device, dtype });
+      const setup = `Model siap dalam ${((performance.now() - started) / 1000).toFixed(1)} s · device ${device} · dtype ${dtype}`;
+      $("info").textContent = setup;
+      $("out").textContent = "Model siap. Tulis pertanyaan lalu klik Kirim.";
+      $("go").disabled = false;
+
+      $("go").onclick = async () => {
+        const prompt = $("prompt").value.trim();
+        if (!prompt) return;
+        $("go").disabled = true;
+        $("out").textContent = "";
+        let tokens = 0;
+        const t0 = performance.now();
+        const streamer = new TextStreamer(generator.tokenizer, {
+          skip_prompt: true,
+          skip_special_tokens: true,
+          callback_function: (text) => { $("out").textContent += text; },
+          token_callback_function: () => { tokens += 1; },
+        });
+        try {
+          await generator([
+            { role: "system", content: "Jawab singkat dalam Bahasa Indonesia." },
+            { role: "user", content: prompt },
+          ], { max_new_tokens: 96, do_sample: false, streamer });
+          const sec = (performance.now() - t0) / 1000;
+          $("info").textContent = `${setup} · ${tokens} token dalam ${sec.toFixed(1)} s (${(tokens / sec).toFixed(1)} token/s)`;
+        } catch (error) {
+          $("out").textContent = `Jawaban gagal dibuat: ${error.message}. Coba prompt yang lebih pendek.`;
+        } finally {
+          $("go").disabled = false;
+        }
+      };
+    } catch (error) {
+      $("out").textContent = `Model gagal dimuat: ${error.message}. Periksa koneksi, ruang disk, dan buka lewat http://localhost.`;
+    }
+  </script>
+</body>
+</html>

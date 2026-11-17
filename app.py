@@ -60,4 +60,6 @@ with gr.Blocks(title="Cloud Notes Sentiment Lab") as demo:
     run_button.click(analyze, inputs=[text_input, mode, threshold], outputs=[labels, details, tokens])
 
 if __name__ == "__main__":
-    demo.launch(server_name=os.getenv("GRADIO_SERVER_NAME", "127.0.0.1"), server_port=7860)
+    # Port bisa diganti per laptop: GRADIO_SERVER_PORT=7861 (PowerShell: $env:GRADIO_SERVER_PORT=7861)
+    demo.launch(server_name=os.getenv("GRADIO_SERVER_NAME", "127.0.0.1"),
+                server_port=int(os.getenv("GRADIO_SERVER_PORT", "7860")))
